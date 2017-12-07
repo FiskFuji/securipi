@@ -46,7 +46,7 @@ def send_email(conf):
                 msg.attach(part)
 
         username = "securipi.project@gmail.com"
-        password = "WeKeepYourHomeSafe"
+        password = "PASSWORD__GOES__HERE"
 
         # Actually sending email.
         server = smtplib.SMTP('smtp.gmail.com:587')

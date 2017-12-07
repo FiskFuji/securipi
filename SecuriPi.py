@@ -84,17 +84,19 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
         thresh = cv2.threshold(frameDelta, conf['delta_thresh'], 255,
                 cv2.THRESH_BINARY)[1]
         thresh = cv2.dilate(thresh, None, iterations=2)
-        im2, conts, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
-                cv2.CHAIN_APPROX_SIMPLE)
-
-        for c in conts:
-                if cv2.contourArea(c) < conf["min_area"]:
-                        continue
+	''' findContours() has changed its return values '''
+        contours, hierarchy = cv2.findContours(thresh.copy(), cv2.RETR_LIST, 
+		cv2.CHAIN_APPROX_SIMPLE)
+	
+	
+        for c in contours:
+		if cv2.contourArea(c) < conf['min_area']:
+			continue
 
                 # Compute bounding box using cv, draw, and update the text.
                 (x, y, w, h) = cv2.boundingRect(c)
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                text = 'Occupied.'
+                text = 'Occupied'
 
         # Write text and timestamp to frame.
         ts = timestamp.strftime("%A %d %B %Y %I:%M:%S%p")
@@ -139,3 +141,4 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
 
         # Clear the stream in preparation for the next frame.
         rawCapture.truncate(0)
+	print text
